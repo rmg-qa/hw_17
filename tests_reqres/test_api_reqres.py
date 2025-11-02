@@ -9,14 +9,16 @@ import helpers
 
 
 def test_get_users():
-    request = requests.get('https://reqres.in/api/users', params={"page": 2})
+    request = requests.get('https://reqres.in/api/users',
+                           headers={"x-api-key": "reqres-free-v1"},
+                           params={"page": 2})
     assert request.status_code == 200
 
 
 def test_post_create_user():
     request = requests.post('https://reqres.in/api/users',
                             headers={"x-api-key": "reqres-free-v1"},
-                            json={"name": helpers.fake_data_user()[0], "job": helpers.fake_data_user()[3]})
+                            json={"name": helpers.fake_data_user()[0], "job": helpers.fake_data_user()[2]})
     body = request.json()
     assert request.status_code == 201
     validate(body, schema=create_users)
@@ -25,7 +27,7 @@ def test_post_create_user():
 def test_put_user():
     request = requests.put('https://reqres.in/api/users/2',
                            headers={"x-api-key": "reqres-free-v1"},
-                           json={"name": helpers.fake_data_user()[0], "job": helpers.fake_data_user()[3]})
+                           json={"name": helpers.fake_data_user()[0], "job": helpers.fake_data_user()[2]})
     body = request.json()
     assert request.status_code == 200
     validate(body, schema=put_users)
@@ -50,7 +52,7 @@ def test_delete_user():
 def test_negative_create_user():
     request = requests.post('https://reqres.in/api/users',
                             headers={"x-api-key": "reqres-free-v1"},
-                            json={"name": 1, "job": helpers.fake_data_user()[3]})
+                            json={"name": 1, "job": helpers.fake_data_user()[2]})
     assert request.status_code == 400
 
 
@@ -124,7 +126,7 @@ def test_empty_body_response_json():
 
 def test_return_correct_fields_name_and_job():
     name = helpers.fake_data_user()[0]
-    job = helpers.fake_data_user()[3]
+    job = helpers.fake_data_user()[2]
     request = requests.post('https://reqres.in/api/users',
                             headers={"x-api-key": "reqres-free-v1"},
                             json={"name": name, "job": job})
